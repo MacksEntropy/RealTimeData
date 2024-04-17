@@ -5,8 +5,11 @@ name = "pypi"
 
 [packages]
 pandas = "*"
-kafka = "*"
 faker = "*"
+fastapi = {extras = ["all"], version = "*"}
+pydantic = "*"
+pytest = "*"
+kafka-python = "*"
 
 [dev-packages]
 
