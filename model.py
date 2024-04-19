@@ -1,5 +1,4 @@
 from pydantic import BaseModel, Field
-from datetime import datetime
 
 
 class ChemicalLevels(BaseModel):
@@ -16,11 +15,6 @@ class Measurement(BaseModel):
     sensor_id: int = Field(..., ge=1, lt=100) 
     chemical_measurements: ChemicalLevels
 
-class SensorArray:
-    time: datetime = Field(...)
-    node: Measurement
-
-
 
 if __name__ == "__main__":
 
@@ -29,12 +23,11 @@ if __name__ == "__main__":
         "H2O_level" : 70,
         "CO2_level" : 1.2
     }
-    cl = ChemicalLevels(**dummy_cls)
 
     dummy_measurement = {
         "temperature" : 14.2,
         "preassure" : 750,
-        "chemical_measurements" : cl,
+        "chemical_measurements" : dummy_cls,
         "btu_measurement" : 2000.8,
         "sensor_id" : 50
     }

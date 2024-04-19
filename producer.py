@@ -2,15 +2,13 @@ import json
 import time
 import random
 
-
 from kafka import KafkaProducer
-from faker import Faker
 
 
 class MockDataStream():
 
     def __init__(self) -> None:
-        self.fake = Faker()
+        pass
         
     def mock_chem_levels(self):
         return {
