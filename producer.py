@@ -2,41 +2,42 @@ import json
 import time
 import random
 
+
 from kafka import KafkaProducer
 from faker import Faker
 
-from data import fake_transaction
-
-#Module for simulating a Kafka Stream for testing
 
 class MockDataStream():
 
     def __init__(self) -> None:
         self.fake = Faker()
-
-    def possible_error(self):
-        if random.randint(0,10) >= 7:
-            return -1
-        else:
-            return 1
-
-    def fake_transaction(self):
+        
+    def mock_chem_levels(self):
         return {
-            "Name": self.fake.name(),
-            "Email": self.fake.email(),
-            "Price": round(random.uniform(0.0,100.0),2),
-            "Quantity": random.randint(0,10),
-            "Possible_error": self.possible_error()
-        }
+        "H2S_level" : round(random.uniform(0.0,4.0),3),
+        "H2O_level" : round(random.uniform(0.0,120.0),3),
+        "CO2_level" : round(random.uniform(0.0,3.0),3)
+    }
+
+    def mock_measusrements(self):
+        return {
+        "temperature" : round(random.uniform(10.0,16.0),3),
+        "preassure" : round(random.uniform(200.0,1500.0),3),
+        "chemical_measurements" : self.mock_chem_levels(),
+        "btu_measurement" : round(random.uniform(1000.0,10000.0),3),
+        "sensor_id" : random.randint(0,99)
+    }
 
     def produce_data(self):
         producer = KafkaProducer(bootstrap_servers='localhost:9092', 
                                 value_serializer=lambda m: json.dumps(m).encode("utf-8"))
         print('Producer created..............')
         while 1:
-            transaction = self.fake_transaction()
-            producer.send('Transactions',transaction)
+            measurement = self.mock_measusrements()
+            producer.send('Measurements',measurement)
             time.sleep(5)
 
 if __name__ == '__main__':
-    pass
+    
+    stream = MockDataStream()
+    stream.produce_data()
